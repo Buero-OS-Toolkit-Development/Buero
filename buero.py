@@ -163,6 +163,7 @@ except:
     USER = "RANDOM_NAME_NO_PROFILE_"+str(randint(10**4, 10**5-1))
 
 #BETA und BETAFLAG lesen und setzen
+dLg.entry("BETA check")
 if not OFFLINE:
     BETA =  bÃ¼.checkBETA(USER)
 BETAFLAG = FLAG and BETA
@@ -190,10 +191,25 @@ texts = ["(installiere {} Pakete)", "(fÃ¼hre BÃ¼ro {} mal aus)", "(habe {}â
          "(empfange {} Mails)", "(habe {} LateinTrainer-Punkte)", "(installiere Pakete aus {} Bereichen)",\
          "(installiere {} Plugins)", "(teste eine BETA-Funktion)", "(habe einen Nutzernamen)", "(gehe offline - 'nicht ernsthaft, oder?!')",\
          "(buche PREMIUM)", "(das ist geheim)", "(sei beim JubilÃ¤umsspecial dabei)", "(akzeptiere die AGB)", "(schalte {} Erfolge frei)"]
-targets = [len(installiert), achievements[0], float(open("./programdata/bank/konto.txt", "r").read()) if "BÃ¼roBank" in installiert else 0,\
-           len(os.listdir("./programdata/mail/sent")) if "BÃ¼roMail" in installiert else 0,\
-           bÃ¼.countFiles("./programdata/mail/inbox"),\
-           int(open("./programdata/ltp/savedData.txt", "r", encoding="utf-8").read().split("#*#")[1]),\
+#Target-Liste
+if "BÃ¼roBank" in installiert:
+    with open("./programdata/bank/konto.txt", "r") as f:
+        kontostand_e = float(f.read())
+else:
+    kontostand_e = 0
+if "BÃ¼roMail" in installiert:
+    sentMails_e = len(os.listdir("./programdata/mail/sent"))
+    recievedMails_e = bÃ¼.countFiles("./programdata/mail/inbox")
+else:
+    sentMails_e = 0
+    recievedMails_e = 0
+if "LTP Agent" in installiert:
+    with open("./programdata/ltp/savedData.txt", "r", encoding="utf-8") as f:
+        ltpScore_e = int(f.read().split("#*#")[1])
+else:
+    ltpScore_e = 0
+targets = [len(installiert), achievements[0], kontostand_e, sentMails_e,\
+           recievedMails_e, ltpScore_e,\
            len(bereiche), len(plugin), BETAFLAG,\
            not "RANDOM" in USER, OFFLINE, PREMIUM, False, False, AGB, len(unlocked)]
 
@@ -540,7 +556,7 @@ while True:
                                 py.alert("Folgende Pakete werden bald erscheinen:\n"+addtext2+"Folgende wichtige Updates sind geplant:"+addtext, "Coming Soon")
                             elif antwort3 == "What's new?":
                                 py.alert("Neu:\nNeben zahlreichen kleineren Verbesserungen enthÃ¤lt dieses Update:\n"+\
-                                         "-5 neue Erfolge\n-ein neues Gewinnspiel\n-ein neues Paket\n-zahlreiche weitere Inhalte", "What's new?")
+                                         "Zahlreiche Fehlerbehebungen", "What's new?")
                             elif antwort3 == "BETA-Testinhalte":
                                 if BETA:
                                     beta = ["Testen Sie die PREVIEW Version von BÃ¼roBonus.",\
@@ -871,7 +887,7 @@ while True:
                                 for i in in2:
                                     ges1 = 0;ges2 = 0;ges3 = 0;ges4 = 0
                                     st.draw_one_bar()
-                                    #st.send_message_new(" '"+i+"' berechnen")
+                                    st.send_message_new(" '"+i+"' berechnen")
                                     if i == "VerschlÃ¼sseler":
                                         ges3 = bÃ¼.get_size("./shopping/images")
                                         ges1 = bÃ¼.get_sizes(["./verschlÃ¼sseln.py", "./shopping"]) - ges3                                   
