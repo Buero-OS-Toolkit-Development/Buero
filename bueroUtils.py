@@ -23,7 +23,7 @@ class bueroUtils:
         self.os = os
         self.errorMessage = errorMessage
         self.installed = self.get_installed()[1]
-        self.__version__ = (4, 3, 0)
+        self.__version__ = (4, 3, 1)
     def installmod(self, module: str):
         """
         Installiert gegebenes Modul in subshell.
@@ -323,9 +323,8 @@ class bueroUtils:
         """
         import requests
         rq = requests.post(url, data).content
-        rq_ = str(rq, encoding="utf-8")
-        rq_ = rq_[0].lstrip("b")+rq_[1:]
-        return rq_.replace("'", "").replace('"', '')
+        self.dLg.entrys(rq, url, data, "webContent called")
+        return rq.decode()
     def web_update(self, versionUrl: str = "https://lkunited.pythonanywhere.com/bueroVersion", username: str = "RANDOM_USER"):
         """
         LÃ¤dt Update aus Web herunter.
@@ -567,8 +566,8 @@ class debugLog(bueroUtils):
         """
         import datetime
         if self.canceled == False:
-            with open("./programdata/buero/debug/{}{}_debug_log_{}.txt".format(name_add, self.packageName, str(datetime.datetime.today())[0:-7].replace(" ", "-").replace(":", "-")), "w", encoding="utf-8") as f:
-                f.write(self.out.getvalue())
+            with open("./programdata/buero/debug/{}{}_debug_log_{}.txt".format(name_add, self.packageName, str(datetime.datetime.today())[0:-7].replace(" ", "-").replace(":", "-")), "a", encoding="utf-8") as f:
+                f.write("---"+self.out.getvalue())
     def presave_log(self):
         """
         Speichert Debug-Log mit vorangehendem 'pre_'-Code.
@@ -594,6 +593,7 @@ class debugLog(bueroUtils):
         """
         from naturalsize import reverse
         self.canceled = reverse(self.canceled)
+        self.entrys(self.canceled, "log cancel_")
     def autoPresave_(self):
         """
         Kehrt autoPresave-Eistellung um.
@@ -620,23 +620,22 @@ class status(bueroUtils):
         self.tcolors = tcolors
         self.currentStrLen = 0
         self.sysStdoutObj = sys.stdout
-        self.sM_isInitialized = False
+        #self.sM_isInitialized = False
         while self.number % self.parts != 0:
             self.number += 1
         self.dLg.entry("Status-Class used: {}#{}#{}#{}#{}#{}#{}#{}".format(message, str(number), str(self.number), fill, unfill, end, start, parts))
     def send_message_new(self, add: str = ""):
         """
-        Sendet vollstÃ¤ndigen Status-Bar mit variabler Nachricht und Farbe.
+        Sendet vollstÃ¤ndigen Status-Bar mit variabler Nachricht, aber ohne Farbe.
         LÃ¶scht vorher vorrangegangenen Status-Bar.
         """
         #print(self.currentStrLen)
-        if not self.sM_isInitialized:
-            self.sysStdoutObj.write(self.c.col(self.colors[0])+self.message+self.c.RESET_ALL+self.end)
-            self.sM_isInitialized = True
+        #if not self.sM_isInitialized:
+        #    self.sysStdoutObj.write(self.message+self.end)
+        #    self.sM_isInitialized = True
         self.sysStdoutObj.write("\b"*self.currentStrLen)
-        WStr = self.c.col(self.traffic(self.akt, 0, self.number, self.tcolors, "max", False))+self.akt*self.fill+\
-               (self.number-self.akt)*self.unfill+self.c.RESET_ALL+self.end+self.c.col(self.colors[1])+add+self.c.RESET_ALL
-        self.currentStrLen = len(self.akt*self.fill+(self.number-self.akt)*self.unfill+self.end+add)
+        WStr = self.message+self.end+self.akt*self.fill+(self.number-self.akt)*self.unfill+self.end+add
+        self.currentStrLen = len(WStr)#len(self.akt*self.fill+(self.number-self.akt)*self.unfill+self.end+add)
         self.sysStdoutObj.write(WStr)
         self.sysStdoutObj.flush()
         self.akt += int(self.number/self.parts)
