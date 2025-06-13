@@ -23,7 +23,7 @@ class bueroUtils:
         self.os = os
         self.errorMessage = errorMessage
         self.installed = self.get_installed()[1]
-        self.__version__ = (4, 3, 1)
+        self.__version__ = (4, 3, 2)
     def installmod(self, module: str):
         """
         Installiert gegebenes Modul in subshell.
@@ -338,7 +338,7 @@ class bueroUtils:
             py.alert("Ein Fehler ist beim Download der aktuellsten Version aufgetreten.", "Error")
             return False
         if self.buttonLog("Es wird versucht, die folgende Version herunterzuladen:\n" + update_version) == "Fortfahren":
-            update_ = requests.get("https://leanderkafemann.github.io/bueroWebsite/data/bÃ¼ro" + update_version + ".zip").content
+            update_ = requests.get("https://buero-os-toolkit-development.github.io/bueroWebsite/data/bÃ¼ro" + update_version + ".zip").content
             if not "<!DOCTYPE"+" html>" in str(update_):
                 with open("./bÃ¼ro" + update_version + ".zip", "wb") as f:
                     f.write(update_)
