@@ -12,7 +12,7 @@ IT: 'BÃ¼ro', tutti i pachi relativi e funzioni sono stati programmati da Leand
  Your version was released the/
  Tua varianta singularis apparebat ad/
  La Loro versione Ã¨ stata pubblicata il}
-10.04.2025/X.IV.MMXXV.
+13.06.2025/XIII.VI.MMXXV.
 """
 #Python-Version prÃ¼fen
 import sys, os
@@ -54,12 +54,14 @@ import shutil, threading, requests, zipfile
 from random import choice, randint
 from tkinter.filedialog import askopenfilename
 import update
+
 #ModulÃ¼berprÃ¼fung
 s.send_message(" #Module prÃ¼fen")
 bÃ¼.install_check(PACKAGES)
 py = bÃ¼.importPyautoguiCatched()
-import pyimager, pysounds, pyperclip, numpy, pycols
+import pyimager, pysounds, pyperclip, pycols
 from naturalsize import *
+
 #Initialisierung
 s.send_message(" #Daten initialisieren")
 antwort = ""
@@ -70,6 +72,7 @@ PREMIUM = False; ILLEGAL = False; OFFLINE = False; AGB = True
 FLAG = False; BETA = False; BETAFLAG = False
 toBook = False
 BPATH = "./programdata/buero/"
+
 #Dateilisten fÃ¼r ausgewÃ¤hlte Pakete
 imlist = ['crack1.png', 'crack2.png', 'door.png', 'energie.png', 'floor1.png', 'floor2.png',\
           'guard.png', 'key.png', 'player.png', 'superguard.png', 'wall.png']
@@ -81,6 +84,7 @@ balims = ['background.png', 'background2.png', 'balloon.png', 'balloon2.png', 'b
 gigims = ['cow.png', 'cow-water.png', 'fangflower.png', 'flower.png', 'flower-wilt.png',\
           'garden.png', 'ufo.png', 'zap.png']
 quizmusic = ['quiz-music.mp3']
+
 #Button-Datenbank
 konfig = ["Tools", "Informationen", "Shopping & Weiteres", "Account", "BÃ¼roOnline", "FÃ¼r Dich", "Debug", "Speicherplatz", "ZurÃ¼ck"]
 buttons = [["Update", "Upgrade", "Systemupdate", "Hintergrundsystemupdate", "Update herunterladen", "BETA herunterladen","Aktualisieren", "Notizen"],\
@@ -105,6 +109,7 @@ files = os.listdir()
 list_container = [werkzeuge, unterhaltung, medien, lernen, plugin]
 name_container = ["Werkzeuge", "Unterhaltung", "Medien", "Lernen", "Plugins"]
 bereiche = [name_container[i] for i in range(len(list_container)) if len(list_container[i]) > 0]
+
 #FF prÃ¼fen        
 s.send_message(" #Feature-Flags prÃ¼fen")
 try:
@@ -252,10 +257,18 @@ if not OFFLINE:
         py.alert("Web-Registrierung sicherheitsrelevanter Daten fehlgeschlagen.\nWenden Sie sich an den Kundenservice.", "rU-Fehler")
         dLg.entry("WEB-rU-Fehler")
 
+#BueroOSFinishedFlag
+if not OFFLINE:
+    if bÃ¼.web_content("https://lkunited.pythonanywhere.com/bueroOSFinishedFlag") == "True":
+        if bÃ¼.buttonLog("Eine neue Version von BÃ¼ro ist verfÃ¼gbar: BueroOS!\nIhre Version wird nicht mehr unterstÃ¼tzt.", "BueroOS") != "Fortfahren":
+            dLg.entry("BueroOS-Flag UP and User cancelled")
+            bÃ¼.normal_quit()
+
 #Debug
 dLg.entrys(act, lenge, PIN_e, version, bereiche, werkzeuge, unterhaltung, medien, lernen, plugin, PREMIUM, pre_check,\
            ILLEGAL, installiert, bÃ¼, AGB, COLORS_, PLUS, unlocked, achievements, OFFLINE, USER, DEVID, devidst,\
            [bÃ¼.get_version(i) for i in PACKAGES], FLAG, pre_z, upgr, BETA, BETAFLAG, PACKAGES)
+
 #variable Nachricht
 try:
     if OFFLINE:
@@ -294,7 +307,8 @@ while True:
 
         ## Platz fÃ¼r ANNOUNCEMENTS
         ## py.alert("Bitte beachten Sie, dass Sie in naher Zukunft nur noch Ã¼ber BÃ¼roMail an Gewinnspielen teilnehmen werden kÃ¶nnen.", "BÃ¼roMail")
-        ## print("Es dÃ¼rfen hier auch Aktionen ausgefÃ¼hrt werden")    
+        ## print("Es dÃ¼rfen hier auch Aktionen ausgefÃ¼hrt werden")   
+         
     except IndexError:
         dLg.entry("NO ADS!!")
     except:
@@ -305,6 +319,7 @@ while True:
                 antwort = "NOTEST"
                 break
             dLg.entry("Main Menu"); 
+
             discover = randint(1, 77) if "Entdecker" not in unlocked else 0; dLg.entry(discover)
             if not skipwin:
                 antwort = py.confirm("Welches unserer Programme wollen Sie nutzen?", "BÃ¼ro V" + version, buttons=bereiche+PLUS+(["KLICK ME"] if discover == 1 else [])+["Konfigurieren", "Quit"])
@@ -318,6 +333,7 @@ while True:
             else:
                 skip2 = False
             dLg.entry(antwort)
+
             if antwort == "Erfolg freischalten":
                 unlocked.append("Entdecker"); bÃ¼.display_achievement("Entdecker"); print(achs[-4][0], texts[-4])
                 pysounds.fanfare()
@@ -560,7 +576,7 @@ while True:
                             elif antwort3 == "BETA-Testinhalte":
                                 if BETA:
                                     beta = ["Testen Sie die PREVIEW Version von BÃ¼roBonus.",\
-                                            ""]
+                                            "Momentan ist kein BETA-Testinhalt verfÃ¼gbar."]
                                     py.alert(beta[1], "BETA-Inhalte")
                                 else:
                                     py.alert("Sie mÃ¼ssen fÃ¼r diese Aktion Teil des BETA-Programms sein.", "BETA erforderlich")
@@ -575,7 +591,7 @@ while True:
                                         try:
                                             spl = anfordern.split(", ")
                                             with open("./downloadedPackage_"+spl[0]+spl[1]+".zip", "wb") as f:
-                                                dwl = requests.get("https://leanderkafemann.github.io/bueroWebsite/data/" + spl[0] + spl[1] + ".zip").content
+                                                dwl = requests.get("https://buero-os-toolkit-development.github.io/bueroWebsite/data/" + spl[0] + spl[1] + ".zip").content
                                                 if "<!DOCTYPE"+" html>" in str(dwl):
                                                     raise ValueError()
                                                 f.write(dwl)
@@ -887,7 +903,7 @@ while True:
                                 for i in in2:
                                     ges1 = 0;ges2 = 0;ges3 = 0;ges4 = 0
                                     st.draw_one_bar()
-                                    st.send_message_new(" '"+i+"' berechnen")
+                                    st.send_message(" '"+i+"' berechnen")
                                     if i == "VerschlÃ¼sseler":
                                         ges3 = bÃ¼.get_size("./shopping/images")
                                         ges1 = bÃ¼.get_sizes(["./verschlÃ¼sseln.py", "./shopping"]) - ges3                                   
