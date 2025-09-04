@@ -23,7 +23,7 @@ class bueroUtils:
         self.os = os
         self.errorMessage = errorMessage
         self.installed = self.get_installed()[1]
-        self.__version__ = (4, 3, 2)
+        self.__version__ = (4, 4, 0)
     def installmod(self, module: str):
         """
         Installiert gegebenes Modul in subshell.
@@ -607,7 +607,6 @@ class status(bueroUtils):
     """
     def __init__(self, message: str = "", number: int = 50, start: int = 0, fill: str = "-", unfill: str = " ", end: str = "|", \
                  parts: int = 1, colors: list[str, str] = ["WHITE"]*2, tcolors: list[str, str, str] = ["WHITE"]*3):
-        import sys
         bueroUtils.__init__(self)
         self.message = message
         self.number = number
@@ -618,28 +617,9 @@ class status(bueroUtils):
         self.parts = parts
         self.colors = colors
         self.tcolors = tcolors
-        self.currentStrLen = 0
-        self.sysStdoutObj = sys.stdout
-        #self.sM_isInitialized = False
         while self.number % self.parts != 0:
             self.number += 1
         self.dLg.entry("Status-Class used: {}#{}#{}#{}#{}#{}#{}#{}".format(message, str(number), str(self.number), fill, unfill, end, start, parts))
-    def send_message_new(self, add: str = ""):
-        """
-        Sendet vollstÃ¤ndigen Status-Bar mit variabler Nachricht, aber ohne Farbe.
-        LÃ¶scht vorher vorrangegangenen Status-Bar.
-        """
-        #print(self.currentStrLen)
-        #if not self.sM_isInitialized:
-        #    self.sysStdoutObj.write(self.message+self.end)
-        #    self.sM_isInitialized = True
-        self.sysStdoutObj.write("\b"*self.currentStrLen)
-        WStr = self.message+self.end+self.akt*self.fill+(self.number-self.akt)*self.unfill+self.end+add
-        self.currentStrLen = len(WStr)#len(self.akt*self.fill+(self.number-self.akt)*self.unfill+self.end+add)
-        self.sysStdoutObj.write(WStr)
-        self.sysStdoutObj.flush()
-        self.akt += int(self.number/self.parts)
-        self.dLg.entry("Number:{};Message:{}".format(self.akt, add))
     def send_message(self, add: str = ""):
         """
         Sendet vollstÃ¤ndigen Status-Bar mit variabler Nachricht und Farbe.
