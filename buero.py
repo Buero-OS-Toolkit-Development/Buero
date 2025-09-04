@@ -12,8 +12,11 @@ IT: 'BÃ¼ro', tutti i pachi relativi e funzioni sono stati programmati da Leand
  Your version was released the/
  Tua varianta singularis apparebat ad/
  La Loro versione Ã¨ stata pubblicata il}
-13.06.2025/XIII.VI.MMXXV.
+04.09.2025/IV.IX.MMXXV.
 """
+
+__version__ = "4.4.0"
+
 #Python-Version prÃ¼fen
 import sys, os
 from time import sleep
@@ -25,6 +28,7 @@ if sys.version_info < (3, 11, 0):
 if sys.version_info > (3, 12, 0):
     print("BÃ¼ro ist fÃ¼r Ihre Python-Version nicht getestet.\nBitte melden Sie auftretende Fehler dem Kundenservice.")
 print("Bootvorgang gestartet. Dies kann einen Moment in Anspruch nehmen.")
+
 #Running-Check
 if "running.txt" in os.listdir("./programdata/run"):
     run = input("BÃ¼ro lÃ¤uft bereits.\nDas erneute AusfÃ¼hren kann zu erheblichen Fehlern fÃ¼hren.\nWie wollen Sie fortfahren?\nOptionen: Quit, Fehler beheben --> ")
@@ -37,6 +41,7 @@ if "running.txt" in os.listdir("./programdata/run"):
         quit(code="Already running")
 else:
     open("./programdata/run/running.txt", "x").close()
+
 #preimport und notwendige Daten
 import bueroUtils, pycols
 bÃ¼ = bueroUtils.bueroUtils()
@@ -48,6 +53,7 @@ PACKAGES = ['colorama', 'easygui', 'eyed3', 'datetime', 'keyboard', 'naturalsize
             'pymsgbox', 'pyperclip', 'pyscreeze', 'pysounds', 'reportlab', 'requests']
 s = bÃ¼.status("Bootvorgang: ", number=45, start=3, parts=15, colors=COLORS, tcolors=TCOLORS)
 s.send_message(" #Preimport getÃ¤tigt");s.send_message(" #Python-Version geprÃ¼ft"); s.send_message(" #Running-Daten Ã¼berprÃ¼ft")
+
 #notwendige Imports
 s.send_message(" #weitere Imports abschlieÃŸen")
 import shutil, threading, requests, zipfile
@@ -69,7 +75,7 @@ adlist = ["bÃ¼ro4.4.png", "bueroLogo.png", "LTP.png", "Bonus.png", "GoodFood.p
 lklist = []#"HandballWM25Special.lkim"]
 winlist = ["z!GG100010.txt"]
 PREMIUM = False; ILLEGAL = False; OFFLINE = False; AGB = True
-FLAG = False; BETA = False; BETAFLAG = False
+FLAG = False
 toBook = False
 BPATH = "./programdata/buero/"
 
@@ -87,10 +93,10 @@ quizmusic = ['quiz-music.mp3']
 
 #Button-Datenbank
 konfig = ["Tools", "Informationen", "Shopping & Weiteres", "Account", "BÃ¼roOnline", "FÃ¼r Dich", "Debug", "Speicherplatz", "ZurÃ¼ck"]
-buttons = [["Update", "Upgrade", "Systemupdate", "Hintergrundsystemupdate", "Update herunterladen", "BETA herunterladen","Aktualisieren", "Notizen"],\
-           ["VersionInfo", "UpgradeInfo", "BÃ¼roUpdateInfo", "Coming Soon", "What's new?", "BETA-Testinhalte", "Tipps"],\
+buttons = [["Update", "Upgrade", "Systemupdate", "Hintergrundsystemupdate", "Update herunterladen", "Aktualisieren", "Notizen"],\
+           ["VersionInfo", "UpgradeInfo", "BÃ¼roUpdateInfo", "Coming Soon", "What's new?", "Tipps"],\
            ["Anfordern", "Releases abonnieren", "BÃ¼ro PREMIUM", "Gewinnspiele", "Feedback & FunktionsvorschlÃ¤ge", "AGB ablehnen"],\
-           ["PIN Ã¤ndern", "PIN-Status Ã¤ndern", "Nutzernamen ansehen", "Nutzernamen Ã¤ndern", "BETA verwalten"],\
+           ["PIN Ã¤ndern", "PIN-Status Ã¤ndern", "Nutzernamen ansehen", "Nutzernamen Ã¤ndern"],\
            ["DeviceID ansehen", "statische DeviceID", "DeviceID aktualisieren", "Online einloggen", "Ãœber BÃ¼ro"],\
            ["Status personalisieren", "StartmenÃ¼ personalisieren", "Erfolge ansehen", "Fortschritt ansehen"],\
            ["schnelle Fehleranalyse", "Debug-Log Ã¼bermitteln","PREMIUM funktioniert nicht", "PIN vergessen", "Erfolge aktualisieren", "aktuelles Log", "jedes Log"],\
@@ -167,12 +173,6 @@ try:
 except:
     USER = "RANDOM_NAME_NO_PROFILE_"+str(randint(10**4, 10**5-1))
 
-#BETA und BETAFLAG lesen und setzen
-dLg.entry("BETA check")
-if not OFFLINE:
-    BETA =  bÃ¼.checkBETA(USER)
-BETAFLAG = FLAG and BETA
-
 #Erfolge initialisieren
 s.send_message(" #Erfolgsdaten initialisieren")
 with open(BPATH+"achievements.txt", "r", encoding="utf-8") as f:
@@ -187,15 +187,18 @@ achs = [["Paketbote"], ["Baby", "AnfÃ¤nger", "Kenner", "Profi", "Experte", "To
         ["Multitalent", "Allzweckgelehrter"],\
         ["Pluginliebhaber"], ["Ungeduldiger"], ["Getaufter"],\
         ["Offline"], ["MillionÃ¤r"], ["Entdecker"], ["Partygast"], ["Akzeptant"],\
-        ["Greenhorn", "Neuling", "Lernender", "Fortgeschrittener", "KÃ¶nner", "Meister"]]; gesamt = 34
+        ["TreuerKunde"],\
+        ["Greenhorn", "Neuling", "Lernender", "Fortgeschrittener", "KÃ¶nner", "Meister"]]; gesamt = 35
 needs = [[10], [3, 10, 100, 200, 1000, 2000], [3, 10, 50], [1, 20, 50],\
          [1, 20], [1, 1000, 1000000],\
          [3, 5], [2], [True], [True], [True], [True], [True], [True], [True],\
+         [True],\
          [1, 3, 5, 10, 20, 25]]
 texts = ["(installiere {} Pakete)", "(fÃ¼hre BÃ¼ro {} mal aus)", "(habe {}â‚¬ auf der BÃ¼roBank)", "(sende {} Mails)",\
          "(empfange {} Mails)", "(habe {} LateinTrainer-Punkte)", "(installiere Pakete aus {} Bereichen)",\
          "(installiere {} Plugins)", "(teste eine BETA-Funktion)", "(habe einen Nutzernamen)", "(gehe offline - 'nicht ernsthaft, oder?!')",\
-         "(buche PREMIUM)", "(das ist geheim)", "(sei beim JubilÃ¤umsspecial dabei)", "(akzeptiere die AGB)", "(schalte {} Erfolge frei)"]
+         "(buche PREMIUM)", "(das ist geheim)", "(sei beim JubilÃ¤umsspecial dabei)", "(akzeptiere die AGB)",\
+         "(bleibe bis zuletzt dabei)", "(schalte {} Erfolge frei)"]
 #Target-Liste
 if "BÃ¼roBank" in installiert:
     with open("./programdata/bank/konto.txt", "r") as f:
@@ -215,8 +218,9 @@ else:
     ltpScore_e = 0
 targets = [len(installiert), achievements[0], kontostand_e, sentMails_e,\
            recievedMails_e, ltpScore_e,\
-           len(bereiche), len(plugin), BETAFLAG,\
-           not "RANDOM" in USER, OFFLINE, PREMIUM, False, False, AGB, len(unlocked)]
+           len(bereiche), len(plugin), FLAG,\
+           not "RANDOM" in USER, OFFLINE, PREMIUM, False, False,\
+           AGB, __version__=="4.4.0", len(unlocked)]
 
 #Erfolge prÃ¼fen und verleihen
 s.send_message(" #Erfolge prÃ¼fen und verleihen")
@@ -258,6 +262,8 @@ if not OFFLINE:
         dLg.entry("WEB-rU-Fehler")
 
 #BueroOSFinishedFlag
+py.alert("Bitte beachten Sie, dass Ihre Version nicht lÃ¤nger unterstÃ¼tzt wird.\n"+\
+         "An einer neuen Version wird gearbeitt.", "Buero")
 if not OFFLINE:
     if bÃ¼.web_content("https://lkunited.pythonanywhere.com/bueroOSFinishedFlag") == "True":
         if bÃ¼.buttonLog("Eine neue Version von BÃ¼ro ist verfÃ¼gbar: BueroOS!\nIhre Version wird nicht mehr unterstÃ¼tzt.", "BueroOS") != "Fortfahren":
@@ -267,7 +273,7 @@ if not OFFLINE:
 #Debug
 dLg.entrys(act, lenge, PIN_e, version, bereiche, werkzeuge, unterhaltung, medien, lernen, plugin, PREMIUM, pre_check,\
            ILLEGAL, installiert, bÃ¼, AGB, COLORS_, PLUS, unlocked, achievements, OFFLINE, USER, DEVID, devidst,\
-           [bÃ¼.get_version(i) for i in PACKAGES], FLAG, pre_z, upgr, BETA, BETAFLAG, PACKAGES)
+           [bÃ¼.get_version(i) for i in PACKAGES], FLAG, pre_z, upgr, PACKAGES)
 
 #variable Nachricht
 try:
@@ -298,12 +304,6 @@ while True:
             if ILLEGAL:
                 if bÃ¼.buttonLog("SIE SIND ILLEGAL! FAHREN SIE FORT ODER LÃ–SCHEN SIE IHREN PREMIUM-PASS.", "ILLEGAL", buttons=("LÃ–SCHEN", "WEITER")) == "LÃ–SCHEN":
                     os.remove("./premiumpass.txt");bÃ¼.restart()
-        if "PRE" in version:
-            if bÃ¼.buttonLog("Sie haben eine BETA-Version. Wollen Sie jetzt Feedback geben?", "BETA", buttons=("JA", "NEIN")) == "JA":
-                feedback = py.prompt("BETA-Feedback eingeben:", "BETA-Feedback")
-                if feedback != None:
-                    wb.open("mailto:leander@kafemann.berlin?subject=BETA-Test&body="+feedback)
-                    dLg.entrys("Following feedback entered:", feedback)
 
         ## Platz fÃ¼r ANNOUNCEMENTS
         ## py.alert("Bitte beachten Sie, dass Sie in naher Zukunft nur noch Ã¼ber BÃ¼roMail an Gewinnspielen teilnehmen werden kÃ¶nnen.", "BÃ¼roMail")
@@ -506,14 +506,6 @@ while True:
                                         notizen_ = notizen
                                     with open(BPATH+"notizen.txt", "w") as f:
                                         f.write(notizen_)
-                            elif antwort3 == "BETA herunterladen":
-                                if BETA:
-                                    if bÃ¼.web_update("https://lkunited.pythonanywhere.com/betaVersion", username=USER):
-                                        if bÃ¼.buttonLog("Wollen Sie das Update nun installieren?", "BETA-Update", ("JA", "NEIN")) == "JA":
-                                            skip = True; antwort3 = "Update"
-                                else:
-                                    py.alert("Sie sind nicht Teil des BETA-Programms!", "kein BETA-Nutzer")
-                                    dLg.entry("kein BETA")
                             elif antwort3 == "VersionInfo":
                                 vs = bueroUtils.status("VersionInfo", colors=COLORS, tcolors=TCOLORS, parts=len(installiert)+2)
                                 alerttext = "Sie haben folgende Versionen:\n\nBÃ¼ro: " + version + "\n\n"
@@ -549,11 +541,10 @@ while True:
                             elif antwort3 == "BÃ¼roUpdateInfo":
                                 if not OFFLINE:
                                     v_a = bÃ¼.web_content("https://lkunited.pythonanywhere.com/bueroVersion").split("#**"+"*#")[0]
-                                    v_b_a = bÃ¼.web_content("https://lkunited.pythonanywhere.com/betaVersion", {"pw": "lkunited", "message": USER}).split("#**"+"*#")[0]
                                     if v_a == version:
-                                        py.alert("Sie sind auf dem neuesten Stand.\nDie neueste BETA-Version ist: "+v_b_a, "BÃ¼roUpdateInfo")
+                                        py.alert("Sie sind auf dem neuesten Stand.", "BueroUpdateInfo")
                                     else:
-                                        antwort4 = bÃ¼.buttonLog("Ihre Version: "+version+"\naktuellste Version: "+v_a+"\naktuellste BETA: "+v_b_a, "BÃ¼roUpdateInfo", ("ZurÃ¼ck", "Jetzt aktualisieren", "Jetzt anfordern", "Jetzt herunterladen"))
+                                        antwort4 = bÃ¼.buttonLog("Ihre Version: "+version+"\naktuellste Version: "+v_a, "BueroUpdateInfo", ("ZurÃ¼ck", "Jetzt aktualisieren", "Jetzt anfordern", "Jetzt herunterladen"))
                                         if antwort4 == "Jetzt aktualisieren":
                                             skip = True; antwort2 = "Tools"; antwort3 = "Update"
                                         elif antwort4 == "Jetzt anfordern":
@@ -571,15 +562,9 @@ while True:
                                     addtext2 += "++" + i + "\n"
                                 py.alert("Folgende Pakete werden bald erscheinen:\n"+addtext2+"Folgende wichtige Updates sind geplant:"+addtext, "Coming Soon")
                             elif antwort3 == "What's new?":
-                                py.alert("Neu:\nNeben zahlreichen kleineren Verbesserungen enthÃ¤lt dieses Update:\n"+\
-                                         "Zahlreiche Fehlerbehebungen", "What's new?")
-                            elif antwort3 == "BETA-Testinhalte":
-                                if BETA:
-                                    beta = ["Testen Sie die PREVIEW Version von BÃ¼roBonus.",\
-                                            "Momentan ist kein BETA-Testinhalt verfÃ¼gbar."]
-                                    py.alert(beta[1], "BETA-Inhalte")
-                                else:
-                                    py.alert("Sie mÃ¼ssen fÃ¼r diese Aktion Teil des BETA-Programms sein.", "BETA erforderlich")
+                                py.alert("Neu:\nMit diesem Update wurden einige kleinere Fehler behoben.\n"+\
+                                         "Zudem wurden experimentelle Features entfernt, sodass BÃ¼ro nun wieder schneller lÃ¤uft.\n"+\
+                                         "AuÃŸerdem gibt es einen neuen Erfolg.", "What's new?")
                             elif antwort3 == "Tipps":
                                 antwort4 = "Noch ein Tipp"
                                 while antwort4 == "Noch ein Tipp":
@@ -756,21 +741,6 @@ while True:
                             elif antwort3 == "Nutzernamen ansehen":
                                 if bÃ¼.buttonLog("Ihr Nutzername ist: "+USER, "Nutzernamen ansehen", ("ZurÃ¼ck", "Jetzt Ã¤ndern")) == "Jetzt Ã¤ndern":
                                     skip = True; antwort3 = "Nutzernamen Ã¤ndern"
-                            elif antwort3 == "BETA verwalten":
-                                if bÃ¼.PIN_check(PIN_e, lenge, act) and not OFFLINE:
-                                    if not BETA:
-                                        if bÃ¼.buttonLog("Sie sind noch nicht fÃ¼r BETA angemeldet.\nJetzt anmelden?", "BETA-Anmeldung", buttons=("JA", "NEIN")) == "JA":
-                                            if bÃ¼.buttonLog("Stimmen Sie unseren BETA-AGB zu?\nDiese schlieÃŸen jegliche Haftung unsererseits aus und\nhalten Sie dazu an, BETA-Feedback einzureichen.", "BETA-AGB", ("JA", "NEIN")) == "JA":
-                                                requests.post("https://lkunited.pythonanywhere.com/rB", {"message": USER, "pw": "lkunited", "devidcheck": DEVID})
-                                                py.alert("Erfolgreich fÃ¼r BETA angemeldet.", "BETA-Anmeldung")
-                                                BETA = True; BETAFLAG = BETA and FLAG
-                                    else:
-                                        if bÃ¼.buttonLog("Sie sind bereits fÃ¼r BETA angemeldet.\nVon BETA abmelden?", "BETA-Anmeldung", buttons=("JA", "NEIN")) == "JA":
-                                            requests.post("https://lkunited.pythonanywhere.com/rB", {"message": "-"+USER, "pw": "lkunited", "devidcheck": DEVID})
-                                            py.alert("Erfolgreich von BETA abgemeldet.", "BETA-Anmeldung")
-                                            BETA = False; BETAFLAG = False
-                                else:
-                                    py.alert("Die Authentifizierung ist fehlgeschlagen.\nBitte beachten Sie, dass Sie hierfÃ¼r Internet benÃ¶tigen.", "Fehler")
                             elif antwort3 == "DeviceID ansehen":
                                 if bÃ¼.PIN_check(PIN_e, lenge, act):
                                     if bÃ¼.buttonLog("Ihre DeviceID lautet:\n"+DEVID, "DeviceID ansehen", buttons=("Kopieren", "ZurÃ¼ck")) == "Kopieren":
@@ -903,7 +873,6 @@ while True:
                                 for i in in2:
                                     ges1 = 0;ges2 = 0;ges3 = 0;ges4 = 0
                                     st.draw_one_bar()
-                                    st.send_message(" '"+i+"' berechnen")
                                     if i == "VerschlÃ¼sseler":
                                         ges3 = bÃ¼.get_size("./shopping/images")
                                         ges1 = bÃ¼.get_sizes(["./verschlÃ¼sseln.py", "./shopping"]) - ges3                                   
